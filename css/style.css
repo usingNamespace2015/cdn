@@ -1,0 +1,169 @@
+/* SharePoint 2013 Housekeeping */
+#suiteBarDelta, #s4-titlerow, #s4-ribbonrow, #titleAreaBox, #sideNavBox,#DeltaPageStatusBar {
+	display:none !important;
+}
+.container-outer{
+	background-color: white;
+}
+.ms-webpartzone-cell{
+	margin-bottom: 0px;
+}
+.ms-wikicontent{
+	padding: 0px !important;
+}
+
+#contentBox, #sideNavBox, .ms-webpart-chrome-fullWidth, .row{
+	margin-left:0px !important; 
+	margin-right:0px !important; 
+	min-width:0px !important;
+}
+.container, #s4-bodyContainer{
+    padding: 0px;
+	margin: 0px;
+}
+#contentRow{
+	padding-top: 0px !important;
+}
+/* Header Image (Clyde Companies) */
+.topImage{
+	width:80% !important;
+	margin-left:auto !important; 
+	margin-right:auto !important;
+ }
+.container{
+    width: 100% !important;
+	overflow: hidden;
+}
+.navbar{
+	margin-bottom: 0px !important;
+ }
+.background {
+  overflow-x: hidden;
+  overflow-y: auto; /* has to be scroll, not auto */
+  -webkit-overflow-scrolling: touch;
+}
+
+#s4-workspace {
+	display: block;
+}
+
+/*Information Center */
+#fb-root {
+    display: none;
+}
+/* To fill the container and nothing else */
+.fb_iframe_widget, .fb_iframe_widget span, .fb_iframe_widget span iframe[style] {
+    /*width: 100% !important;*/
+    background-color: rgba(30,87,153, 0.08);
+}
+
+/*Proxy Vote */
+#question{
+	color: white;
+	font-size: 20px !important;
+	font-weight:bold;
+}
+
+#qBackground{
+	background: rgb(30,87,153); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgb(30,87,153) 0%, rgb(41,137,216) 50%, rgb(32,124,202) 51%, rgb(125,185,232) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgb(30,87,153)), color-stop(50%,rgb(41,137,216)), color-stop(51%,rgb(32,124,202)), color-stop(100%,rgb(125,185,232))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%); /* IE10+ */
+	background: linear-gradient(to right,  rgb(30,87,153) 0%,rgb(41,137,216) 50%,rgb(32,124,202) 51%,rgb(125,185,232) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
+}
+#tabulationControl{
+	display:none;
+}
+.green{
+	color:green;
+}
+.red{
+	color:red;
+}
+/* Home Page */
+.admin{
+	display:none !important;
+}
+.slideImage{
+	padding-top: 20px;
+	padding-bottom: 100px;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+/* Meeting */
+.center{
+	text-align : center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
+/*!
+ * Start Bootstrap - Full Slider HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+.carousel,.carousel-inner ,.item,.active{
+    height: 100%;
+}
+
+body{font-size: 10px;}
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: @screen-sm-min) {
+	body{font-size: 12px;}
+}
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: @screen-md-min) {
+	body{font-size: 13px;}
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: @screen-lg-min) {
+	body{font-size: 14px;}
+}
+
+@media (max-width: 992px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin: 7.5px -15px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .navbar-text {
+        float: none;
+        margin: 15px 0;
+    }
+    /* since 3.1.0 */
+    .navbar-collapse.collapse.in { 
+        display: block!important;
+    }
+    .collapsing {
+        overflow: hidden!important;
+    }
+}

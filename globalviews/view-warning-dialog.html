@@ -1,0 +1,10 @@
+<!--
+Dependencies: 
+	angular-idle.min.js
+-->
+<div class="modal-header">
+	<h3>Are You There?</h3>
+</div>
+<div idle-countdown="countdown" ng-init="countdown=30" class="modal-body">
+	<uib-progressbar max="30" value="30" animate="false" class="progress-striped active">You'll be automatically logged out in {{countdown}} seconds.</uib-progressbar>
+</div>

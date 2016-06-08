@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html data-ng-app="trucksApp">
+<head>
+<title>Truck Search</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+<meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0" >
+<!-- CSS styles for standard search box -->
+	<link rel= "stylesheet" type="text/css" href="../SiteAssets/css/truckstyle.css">
+	<script type="text/javascript" src="../SiteAssets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../SiteAssets/js/angular.min.js"></script>
+	<script type="text/javascript" src="../SiteAssets/js/angular-sanitize.min.js"></script>
+	<script type="text/javascript" src="../SiteAssets/js/trucks.js" ></script>
+
+</head>
+<body data-ng-controller="employeeInfoController">
+	<!-- HTML for SEARCH BAR -->
+	<div id="tfheader">
+	<div class = "truckSearch">
+		<div class="form-group" id="tfnewsearch" ng-hide="!searchByTruck">
+			Fleet Number:<br/>
+				<label class="truckPrefix">01-</label>
+				<input ng-keypress="submitKey()" autofocus type="tel" id="Tnumb" class="truckNum form-control" name="q" size="21"/>
+				<span id="searchclear" ng-click="clearX()" class="glyphicon glyphicon-remove-circle"></span>
+				<button type="button" class="btn btn-primary btn-block btn-lg" ng-click="refreshEmployeeInfo()">SEARCH</button>
+		<a href="#" class="pull-right toggleSearch" ng-click="toggleSearch()">Search by Employee Name</a>
+		</div>
+		<div class="form-group" id="tfnewsearch" ng-hide="searchByTruck">
+			Employee Name:<br/>
+				<input ng-keypress="submitKey()" type="text" id="Ename" class="form-control" name="q" size="21"/> 
+				<span id="searchclear" ng-click="clearX()" class="glyphicon glyphicon-remove-circle"></span>
+				<button type="button" class="btn btn-primary btn-block btn-lg" ng-click="refreshEmployeeInfo()">SEARCH</button>
+			<a href="#" class="pull-right toggleSearch" ng-click="toggleSearch()">Search by Truck Number</a>
+				<!--<input type="submit">-->
+		</div>
+	<div class="tfclear"></div>
+	</div>
+	<br/>
+
+<div class="container">
+<table class="table table-striped table-bordered table-responsive">
+  <thead>
+    <tr>
+	  <th scope="col">Employee Image</th>
+	  <th scope="col">Employee Info</th> 
+    </tr>
+  </thead>
+  <tbody>
+     <tr data-ng-repeat="item in employeeInfo">
+	 <td>
+	 <!--------------- Add Picture ---------------->
+	  <figure>
+	  <img check-image data-ng-src='/apps/Profile Pictures Large/{{item.PicLocation}}LThumb.jpg' class="img-responsive" height="96px" width="96px"/>
+	  </figure>
+	 </td>
+      <td ng-class="{red: !item.Synced}">
+	  <b>Company:</b>
+	  {{item.CompanyName}}
+	  <br/>
+	  <b>Name:</b>
+      {{item.EmployeeName}}
+	  <br/>
+	  <b ng-show="{{item.PhoneNumber}}">Mobile:</b>
+      <a ng-show="{{item.PhoneNumber}}" id="callPhone" ng-href="tel:{{item.PhoneNumber}}" class="glyphicon glyphicon-earphone">Call</a>
+	  <br ng-show="{{item.PhoneNumber}}"/>
+	  <b>Job Title:</b>
+      {{item.JobTitle}}
+	  <br/>
+	  <b>Truck Number:</b>
+      {{item.TruckNumber}}
+	  <br/>
+	  <b>Supervisor:</b>
+	  {{item.SupervisorName}}
+	  </td>
+    </tr>
+	<tr ng-show="employeeInfo[0]==null">
+		<td colspan="2">
+		<h2 style="text-align: center">NO RESULTS</h2>
+		</td>
+	</tr>
+
+	</tbody>
+</table>
+</div>
+	
+</body>
+</html>

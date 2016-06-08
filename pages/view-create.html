@@ -1,0 +1,246 @@
+<div class="row" data-ng-controller="accountController">
+	<div class="col-sm-12 col-md-12 col-lg-12">
+		<script type="text/ng-template" id="myPeoplePickerContent.html">
+			<div class="modal-header">
+				<h3 id="modalTitle" class="modal-title">Employee People Picker</h3>
+			</div>
+			<div class="modal-body">
+				<table class="table-condensed">
+					<tbody class="employee">
+						<tr>
+							<td>
+								Type An Employee's Name: <input id="employeeName" focus-me="shouldBeOpen" type="textbox" data-ng-model="name" data-ng-model-options="{debounce: 1000}" data-ng-change="refreshEmployees(name)">
+							</td>
+							<td>
+								<span ng-show="isLoading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table table-condensed table-hover">
+					<thead>
+						<tr>
+							<th><!--Picture--></th>
+							<th><!--Info--></th>
+						</tr>
+					</thead>
+					<tbody class="employee">
+							<tr data-ng-repeat="item in employees" data-ng-mouseover="highlight($index, employees)">
+								<td>
+									<img id="employeePicture" data-ng-src='https://clydelink.sharepoint.com/apps/Profile%20Pictures%20Large/{{item.PicName}}_LThumb.jpg' height="96px" width="96px" />
+								</td>
+								<td>
+									Name:&nbsp;{{item.FullName}}
+									<br/>
+									Manager:&nbsp;{{item.SupervisorFullName}}
+									<br/>
+									Job&nbsp;Title:&nbsp;{{item.JobTitle}}
+									<br/>
+									<br/>
+									<button type="button" class="btn btn-primary" data-ng-click="ok()">SELECT</button>
+								</td>
+							</tr>
+					</tbody>	
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-ng-click="cancel()">CANCEL</button>
+			</div>
+		</script>
+		<ng-form name='hrform'>
+			<div class="col-sm-5 col-md-5 col-lg-5">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th><label>Employee Info&nbsp;</label><span data-toggle="tooltip" data-placement="bottom" title="Buttons will appear AFTER you fill out all the required information" class='glyphicon glyphicon-info-sign'></span></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><label>Company</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td>
+								<select type="text" class="input-xlarge" ng-model="form.company" ng-change="refreshDivisions()" data-ng-options="company.Name for company in companies" required="true">
+									<option value="">--Choose A Company--</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><label>First Name</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td><input type="text" value="" class="input-xlarge" data-ng-model="form.firstName" data-ng-model-options="{debounce:1000}" required="true"></td>
+						</tr>
+						<tr>
+							<td><label>Middle Name</label></td>
+							<td><input type="text" value="" class="input-xlarge" data-ng-model="form.middleName"></td>
+						</tr>
+						<tr>
+							<td><label>Last Name</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td>
+								<input type="text" value="" class="input-xlarge" data-ng-model="form.lastName" data-ng-model-options="{debounce:1000}" ng-change="getPossibleDuplicates()" required="true">
+								<span ng-show="gettingDups" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><label>Manager(Optional)</label></td>
+							<td>
+								<input type="text" value="" class="input-xlarge" data-ng-model="form.manager" readonly>
+								<i style="cursor:pointer;" class="glyphicon glyphicon-remove-sign" data-ng-click="form.manager = ''"></i>
+								<span style="cursor:pointer;" class="glyphicon glyphicon-user" data-ng-click="openModal()"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><label>Same Position?</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td>
+								<input type="radio" value="yes" name="radioRepeat" value="" class="input-xlarge" data-ng-model="form.responsibilities" required="true"> Yes 
+								<input type="radio" value="no" name="radioRepeat" value="" class="input-xlarge" data-ng-model="form.responsibilities" required="true"> No
+							</td>
+						</tr>
+						<tr>
+							<td><label>Notes</label></td>
+							<td><textarea type="text" ng-model="form.notes"></textarea></td>
+						</tr>
+						<tr>
+							<td><label>Divison</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td>
+								<select type="text" class="input-xlarge" ng-model="form.division" ng-change="refreshAreas()" data-ng-options="division.Name for division in divisions" required="true">
+									<option value="">--Choose A Division--</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><label>Area</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td>
+								<select type="text" class="input-xlarge" ng-model="form.area" ng-change="refreshLocations()" data-ng-options="area.Name for area in areas" required="true">
+									<option value="">--Choose An Area--</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><label>Location</label><small><i class="glyphicon glyphicon-asterisk"></i></small></td>
+							<td>
+								<select type="text" class="input-xlarge" ng-model="form.location" ng-change="setLocation()" data-ng-options="location.Name for location in locations" required="true">
+									<option value="">--Choose An Location--</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<button class="btn btn-primary btn-block"  type="button" ng-show="hrform.$valid && isNewHire" ng-click="createAccount()">Create&nbsp;Account</button>
+							</td>
+						</tr>
+						<tr ng-show="isNewHire">
+							<td><label>Username</label></td>
+							<td>{{userAccountInfo.Username}}</td>
+						</tr>
+						<tr ng-show="isNewHire">
+							<td><label>Emp#</label></td>
+							<td>{{userAccountInfo.EmployeeNumber}}</td>
+						</tr>
+						<tr>
+							<td><label>Result</label></td>
+							<td ng-show="userAccountInfo.Result != ''" ng-class="{'text-success' : userAccountInfo.Result=='Success', 'text-danger': (userAccountInfo.Result != 'Success' && userAccountInfo.Result != '')}">{{userAccountInfo.Result}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-5 col-md-5 col-lg-5">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th><label>Possible Rehire(s)&nbsp;</label><i data-toggle="tooltip" data-placement="bottom" title="These are the people that have the same LAST name as the person you are entering." class='glyphicon glyphicon-info-sign'></i></th>
+							<th><!--Possible Rehire Info --></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-show="duplicates != 'null'" data-ng-repeat="item in duplicates track by $index">
+							<td>
+								<br>
+								<img id="employeePicture" data-ng-src='https://clydelink.sharepoint.com/apps/Profile%20Pictures%20Large/{{item.PicName}}_LThumb.jpg' height="96px" width="96px" />
+								<br>
+								<br>
+								<button class="btn btn-primary"  ng-show="hrform.$valid && !item.IsActive" type="button" ng-click="activateAccount(item.UserName, item.EmployeeNumber, item.ExistsInAD)">Request&nbsp;Activation</button>
+							</td>
+							<td ng-class="{'text-success' : item.IsActive, 'text-danger': !item.IsActive}">
+								<br>
+								<label>Name:</label> {{item.FirstName}}&nbsp;{{item.MiddleName}}&nbsp;{{item.LastName}}<br>
+								<label>Title: </label> {{item.JobTitle}}<br>
+								<label>Company: </label> {{item.CompanyName}}<br>
+								<label>Emp#: </label> {{item.EmployeeNumber}}<br>
+								<label>Email: </label> {{item.Email}}<br>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th><label>Pending Hire(s)&nbsp;</label><i data-toggle="tooltip" data-placement="bottom" title="These are the people sitting in the Unassigned OU in Active Directory. No one in this list should have started working already. Call IT if you see any issues." class='glyphicon glyphicon-info-sign'></i></th>
+							<th><!--Pending Hire Data--></th>
+						</tr>
+					</thead>
+						<tr ng-show="pending != 'null'" data-ng-repeat="item in pending track by $index">
+							<td ng-class="{'text-success' : item.IsActive, 'text-danger': !item.IsActive}">
+								<br>
+								<label>Name:</label> {{item.FirstName}}&nbsp;{{item.LastName}}<br>
+								<label>Title: </label> {{item.JobTitle}}<br>
+								<label>Company: </label> {{item.CompanyName}}<br>
+								<label>Emp#: </label> {{item.EmployeeNumber}}<br>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-show="isUpdating" class='overlay'>
+					<h1>
+						Processing <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i>
+					</h1>
+				</div>
+			</div>
+		</ng-form>
+	</div>
+</div>
+<style>
+.overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: rgba(51,51,51,0.7);
+	z-index: 10;
+	display: inline-block;
+	text-align: center;
+	float: none;
+}
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -ms-animation: spin .7s infinite linear;
+    -webkit-animation: spinw .7s infinite linear;
+    -moz-animation: spinm .7s infinite linear;
+}
+.glyphicon.glyphicon-asterisk{
+	top : -5px;
+	color: red;
+	font-size : 50%;
+}
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+  
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
+</style>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
